@@ -1,0 +1,53 @@
+.dark-mode {
+  $bg-color: #374045;
+  $box-color: #1e272e;
+
+  $primary: #1d5767;
+  $primary-50: #1d576780;
+
+  $white-50: #a7a7a7;
+
+  background-color: $bg-color;
+  color: $white;
+
+  min-height: 100vh;
+
+  .filter-invert {
+    filter: invert(0);
+  }
+
+  .text-black-50 {
+    color: $white-50 !important;
+  }
+
+  .bg-primary {
+    background-color: $primary !important;
+  }
+
+  .btn-primary {
+    background-color: $primary !important;
+    border-color: $primary;
+  }
+
+  .btn-check:focus + .btn-primary,
+  .btn-primary:focus {
+    box-shadow: 0 0 0 0.25rem $primary-50;
+  }
+
+  .bg-secondary {
+    background-color: $box-color !important;
+  }
+
+  .apexcharts-grid-row {
+    fill: $box-color;
+  }
+
+  .apexcharts-text {
+    fill: $white;
+  }
+
+  .apexcharts-tooltip-title,
+  .apexcharts-tooltip {
+    background: $bg-color !important;
+  }
+}
