@@ -1,12 +1,12 @@
-import { useState } from "react";
-import NavbarPrimary from "./view/components/NavbarPrimary";
-import RoutesPrimary from "./RoutesPrimary";
-import FooterPrimary from "./view/components/FooterPrimary";
-import Web3 from "web3";
-import Token from "./contracts/Token.json";
-import Vault from "./contracts/Vault.json";
-import ICO from "./contracts/ICO.json";
-import BUSD from "./contracts/BUSD.json";
+import { useState } from 'react';
+import NavbarPrimary from './view/components/NavbarPrimary';
+import RoutesPrimary from './RoutesPrimary';
+import FooterPrimary from './view/components/FooterPrimary';
+import Web3 from 'web3';
+import Token from './contracts/Token.json';
+import Vault from './contracts/Vault.json';
+import ICO from './contracts/ICO.json';
+import BUSD from './contracts/BUSD.json';
 function App() {
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -16,10 +16,10 @@ function App() {
   const [busd, setBusd] = useState(null);
   const [token, setToken] = useState(null);
   const [vault, setVault] = useState(null);
-  const [brickBalance, setBrickBalance] = useState("0");
-  const [busdBalance, setBusdBalance] = useState("0");
-  const [vaultBalance, setVaultBalance] = useState("0");
-  const [earnings, setEarnings] = useState("0");
+  const [brickBalance, setBrickBalance] = useState('0');
+  const [busdBalance, setBusdBalance] = useState('0');
+  const [vaultBalance, setVaultBalance] = useState('0');
+  const [earnings, setEarnings] = useState('0');
   const [time, setTime] = useState(0);
 
   async function connectWallet() {
@@ -28,12 +28,12 @@ function App() {
       if (window.ethereum) {
         const _web3 = new Web3(window.ethereum);
         setWeb3(_web3);
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
 
         const networkId = await _web3.eth.net.getId();
 
         if (networkId !== 56) {
-          alert("please select bsc network");
+          alert('please select bsc network');
           return;
         }
         setAddress(window.ethereum.selectedAddress);
@@ -47,7 +47,7 @@ function App() {
           .balanceOf(window.ethereum.selectedAddress)
           .call();
 
-        setBrickBalance(_web3.utils.fromWei(brick_balance, "ether"));
+        setBrickBalance(_web3.utils.fromWei(brick_balance, 'ether'));
 
         let _vault = new _web3.eth.Contract(Vault.abi, Vault.address);
         setVault(_vault);
@@ -63,8 +63,8 @@ function App() {
           .call();
         let d = await _vault.methods.hodlDuration().call();
 
-        setVaultBalance(_web3.utils.fromWei(b, "ether"));
-        setEarnings(_web3.utils.fromWei(e, "ether"));
+        setVaultBalance(_web3.utils.fromWei(b, 'ether'));
+        setEarnings(_web3.utils.fromWei(e, 'ether'));
 
         setTime(parseInt(c) + parseInt(d));
         console.log(parseInt(c));
@@ -75,14 +75,14 @@ function App() {
         let busd_balance = await _busd.methods
           .balanceOf(window.ethereum.selectedAddress)
           .call();
-        setBusdBalance(_web3.utils.fromWei(busd_balance, "ether"));
+        setBusdBalance(_web3.utils.fromWei(busd_balance, 'ether'));
         setLoading(false);
       } else {
-        alert("please install metamask");
+        alert('please install metamask');
         return;
       }
     } catch (e) {
-      alert("Error:", e);
+      alert('Error:', e);
       return;
     }
   }
@@ -95,17 +95,17 @@ function App() {
         .call();
 
       console.log(`allowance`, allowance);
-      if (allowance === "0") {
+      if (allowance === '0') {
         await busd.methods
-          .approve(ICO.address, web3.utils.toWei("4850999393"))
-          .send({ from: window.ethereum.selectedAddress, gasLimit: "210000" })
-          .on("transactionHash", async () => {
+          .approve(ICO.address, web3.utils.toWei('4850999393'))
+          .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
+          .on('transactionHash', async () => {
             await ico.methods
               .buyTokens(window.ethereum.selectedAddress, a)
               .send({ from: window.ethereum.selectedAddress });
           })
-          .on("error", async (e) => {
-            console.log("Error", e);
+          .on('error', async (e) => {
+            console.log('Error', e);
             return;
           });
       } else {
@@ -124,26 +124,24 @@ function App() {
       let allowance = await token.methods
         .allowance(window.ethereum.selectedAddress, Vault.address)
         .call();
-      if (allowance === "0") {
+      if (allowance === '0') {
         await token.methods
-          .approve(Vault.address, web3.utils.toWei("100004"))
-          .send({ from: window.ethereum.selectedAddress, gasLimit: "210000" })
-          .on("transactionHash", async () => {
-            await vault.methods
-              .stake(a)
-              .send({
-                from: window.ethereum.selectedAddress,
-                gasLimit: "210000",
-              });
+          .approve(Vault.address, web3.utils.toWei('100004'))
+          .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
+          .on('transactionHash', async () => {
+            await vault.methods.stake(a).send({
+              from: window.ethereum.selectedAddress,
+              gasLimit: '210000',
+            });
           })
-          .on("error", async (e) => {
-            console.log("Error", e);
+          .on('error', async (e) => {
+            console.log('Error', e);
             return;
           });
       } else {
         await vault.methods
           .stake(a)
-          .send({ from: window.ethereum.selectedAddress, gasLimit: "210000" });
+          .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' });
       }
     } catch (e) {
       console.log(e.message);
@@ -156,9 +154,9 @@ function App() {
       let a = await web3.utils.toWei(amount);
       await vault.methods
         .withdraw(a)
-        .send({ from: window.ethereum.selectedAddress, gasLimit: "210000" })
-        .on("error", async (e) => {
-          console.log("Error", e);
+        .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
+        .on('error', async (e) => {
+          console.log('Error', e);
           return;
         });
     } catch (e) {
@@ -171,9 +169,9 @@ function App() {
     try {
       await vault.methods
         .getReward()
-        .send({ from: window.ethereum.selectedAddress, gasLimit: "210000" })
-        .on("error", async (e) => {
-          console.log("Error", e);
+        .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
+        .on('error', async (e) => {
+          console.log('Error', e);
           return;
         });
     } catch (e) {
@@ -185,19 +183,20 @@ function App() {
   return (
     <>
       {!loading ? (
-        <main className={` ${darkMode && "dark-mode"}`}>
+        <main className={` ${darkMode && 'dark-mode'}`}>
           <button
-            type="button"
-            className="btn btn-primary fixed-top top-50 end-0 icon-size-small rounded-right-full"
+            type='button'
+            className='btn btn-primary fixed-top top-50 end-0 icon-size-small rounded-right-full'
             onClick={() => setDarkMode(!darkMode)}
           >
             <img
-              className="h-100 w-100 d-block"
-              src={`/assets/${darkMode ? "moon" : "sun"}.png`}
-              alt="dark-mode"
+              className='h-100 w-100 d-block'
+              src={`/assets/${darkMode ? 'moon' : 'sun'}.png`}
+              alt='dark-mode'
             />
           </button>
           <NavbarPrimary
+            darkMode={darkMode}
             connectWallet={connectWallet}
             address={address}
             buyToken={buyToken}
@@ -213,14 +212,14 @@ function App() {
             earnings={earnings}
             time={time}
           />
-          <FooterPrimary />
+          <FooterPrimary darkMode={darkMode} />
         </main>
       ) : (
         <h1
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
           }}
         >
           Loading...
