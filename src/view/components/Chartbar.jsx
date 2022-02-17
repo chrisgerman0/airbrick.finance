@@ -1,10 +1,10 @@
-import React from "react";
-import ReactApexChart from "react-apexcharts";
+import React from 'react';
+import ReactApexChart from 'react-apexcharts';
 
 function Chartbar({ monthlyData, barHeading, barValue }) {
   const series = [
     {
-      name: "Rate",
+      name: 'Rate',
       data: monthlyData,
     },
   ];
@@ -12,12 +12,12 @@ function Chartbar({ monthlyData, barHeading, barValue }) {
   const options = {
     chart: {
       height: 350,
-      type: "bar",
+      type: 'bar',
     },
     plotOptions: {
       bar: {
         borderRadius: 0,
-        columnWidth: "70%",
+        columnWidth: '70%',
       },
     },
     dataLabels: {
@@ -29,7 +29,7 @@ function Chartbar({ monthlyData, barHeading, barValue }) {
 
     grid: {
       row: {
-        colors: ["#fff", "#f2f2f2"],
+        colors: ['#fff', '#f2f2f2'],
       },
     },
     xaxis: {
@@ -37,28 +37,28 @@ function Chartbar({ monthlyData, barHeading, barValue }) {
         rotate: -45,
       },
       categories: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
       ],
-      tickPlacement: "on",
+      tickPlacement: 'on',
     },
 
     fill: {
-      type: "gradient",
-      colors: ["#208390"],
+      type: 'gradient',
+      colors: ['#0e265d'],
       gradient: {
-        shade: "light",
-        type: "horizontal",
+        shade: 'light',
+        type: 'horizontal',
         shadeIntensity: 0,
         gradientToColors: undefined,
         inverseColors: true,
@@ -70,16 +70,16 @@ function Chartbar({ monthlyData, barHeading, barValue }) {
   };
 
   return (
-    <div id="chart">
+    <div id='chart'>
       <ReactApexChart
         options={options}
         series={series}
-        type="bar"
+        type='bar'
         height={305}
       />
-      <div className="text-center">
-        <h6 className="fw-bold mb-0">{barValue}</h6>
-        <h6 className="fw-normal mb-0">{barHeading}</h6>
+      <div className='text-center'>
+        <h6 className='fw-bold mb-0'>{barValue}</h6>
+        <h6 className='fw-normal mb-0'>{barHeading}</h6>
       </div>
     </div>
   );

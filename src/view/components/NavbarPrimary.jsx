@@ -17,14 +17,14 @@ const NavbarPrimary = (props) => {
           </div>
           <div className='ms-auto'>
             <ul className='nav gap-4'>
-              <li>
+              {/* <li>
                 <button
                   type='button'
                   className='btn btn-lg btn-outline-blue border-2 rounded-pill'
                 >
                   <small onClick={() => props.buyToken('1')}>$1 Buy</small>
                 </button>
-              </li>
+              </li> */}
               <li>
                 <button
                   type='button'
