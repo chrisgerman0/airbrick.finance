@@ -29,8 +29,8 @@ const SectionOne = ({
                   <div className='d-flex flex-wrap align-items-center justify-content-center justify-content-md-start'>
                     <span className='icon-size-2 me-3 me-md-5'>
                       <img
-                        className='d-block h-100 w-100'
-                        src='/assets/lock.svg'
+                        className='d-block h-100 w-100 object-contain'
+                        src='/assets/lock.png'
                         alt='lock'
                       />
                     </span>
@@ -91,8 +91,8 @@ const SectionOne = ({
                         <div className='d-flex align-items-center'>
                           <span className='icon-size p-3 me-3'>
                             <img
-                              className='d-block h-100 w-100'
-                              src='/assets/v-icon-2.svg'
+                              className='d-block h-100 w-100 object-contain'
+                              src='/assets/v-icon-2.png'
                               alt='lock'
                             />
                           </span>
@@ -119,7 +119,7 @@ const SectionOne = ({
                   <span className='icon-size-1 me-3'>
                     <img
                       className='d-block h-100 w-100'
-                      src='/assets/wallet.svg'
+                      src='/assets/wallet.png'
                       alt='wallet'
                     />
                   </span>

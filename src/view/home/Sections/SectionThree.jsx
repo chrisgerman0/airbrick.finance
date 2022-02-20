@@ -85,8 +85,8 @@ const SectionThree = () => {
                   <div className='d-flex align-items-center'>
                     <span className='icon-size-1 me-3'>
                       <img
-                        className='d-block h-100 w-100'
-                        src='/assets/investment.svg'
+                        className='d-block h-100 w-100 object-contain'
+                        src='/assets/investment.png'
                         alt='investment'
                       />
                     </span>
