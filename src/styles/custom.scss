@@ -47,7 +47,7 @@ small,
 }
 
 .object-contain {
-  object-fit: contain;
+  object-fit: contain !important;
 }
 
 .logo {
@@ -58,6 +58,17 @@ small,
     width: 100%;
     display: block;
     object-fit: cover;
+  }
+}
+
+.logo-light {
+  width: 145px;
+  height: 120px;
+  img {
+    height: 100%;
+    width: 100%;
+    display: block;
+    object-fit: contain;
   }
 }
 

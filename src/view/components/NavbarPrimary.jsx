@@ -6,7 +6,10 @@ const NavbarPrimary = (props) => {
       <div className='container'>
         <div className='d-flex flex-wrap align-items-center'>
           <div className='logo-container'>
-            <Link to='/' className='d-block logo'>
+            <Link
+              to='/'
+              className={`d-block ${props.darkMode ? 'logo' : 'logo-light '} `}
+            >
               <img
                 src={`/assets/${
                   props.darkMode ? 'logo-dark' : 'logo-light'
