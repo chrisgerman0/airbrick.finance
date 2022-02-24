@@ -174,7 +174,7 @@ const SectionOne = ({
                   <span className='d-flex'>
                     <div className='h2 mb-0 fw-bold'>
                       <div className='d-flex align-items-baseline'>
-                        <span className='me-2'>{busdBalance}</span>{' '}
+                        <span className='me-2'>{parseFloat(busdBalance).toFixed(2)}</span>{' '}
                         <h6 className='mb-0 text-uppercase'>BUSD</h6>
                       </div>
                     </div>
