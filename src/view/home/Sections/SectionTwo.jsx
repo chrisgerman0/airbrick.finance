@@ -13,6 +13,7 @@ const SectionTwo = ({
   withdraw,
   depositToVault,
   getReward,
+  collectRentAndReinvest
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [places, setPlaces] = useState();
@@ -30,6 +31,10 @@ const SectionTwo = ({
       setIsLoading(false);
     }
   }, [section2]);
+
+
+
+
 
   return (
     <section className='pb-5'>
@@ -196,7 +201,7 @@ const SectionTwo = ({
                     <button
                       type='button'
                       className='w-100 h-100 btn btn-lg btn-primary rounded-lg'
-                      onClick={getReward}
+                      onClick={collectRentAndReinvest}
                     >
                       Collect & Reinvest
                     </button>

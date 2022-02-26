@@ -180,6 +180,28 @@ function App() {
     }
   }
 
+  async function collectRentAndReinvest() {
+    try {
+      await vault.methods
+        .getReward()
+        .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
+        .then(async (receipt) => {
+          const tokens = await web3.utils.fromWei(
+                await web3.utils.hexToNumberString(receipt.logs[1].data),
+                "Ether"
+              );
+              await buyToken(tokens)
+        })
+        .on('error', async (e) => {
+          console.log('Error', e);
+          return;
+        });
+    } catch (e) {
+      console.log(e.message);
+      return;
+    }
+  }
+
   return (
     <>
       {!loading ? (
@@ -211,6 +233,7 @@ function App() {
             vaultBalance={vaultBalance}
             earnings={earnings}
             time={time}
+            collectRentAndReinvest={collectRentAndReinvest}
           />
           <FooterPrimary darkMode={darkMode} />
         </main>

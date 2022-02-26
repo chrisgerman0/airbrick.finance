@@ -7,7 +7,7 @@ const HomePage = ({time,earnings,vaultBalance,brickBalance,busdBalance,depositTo
   return (
     <main className='pt-4'>
       <SectionOne brickBalance={brickBalance} busdBalance={busdBalance} depositToVault={depositToVault} buyToken={buyToken}/>
-      <SectionTwo time={time} earnings={earnings} brickBalance={brickBalance} vaultBalance={vaultBalance} withdraw={withdraw} depositToVault={depositToVault} getReward={getReward}/>
+      <SectionTwo time={time} earnings={earnings} brickBalance={brickBalance} vaultBalance={vaultBalance} withdraw={withdraw} depositToVault={depositToVault} getReward={getReward} collectRentAndReinvest={collectRentAndReinvest} />
       <SectionThree />
     </main>
   );
