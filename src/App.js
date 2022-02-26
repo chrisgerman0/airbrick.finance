@@ -185,7 +185,7 @@ function App() {
       await vault.methods
         .getReward()
         .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-        .then(async (receipt) => {
+        .on("confirmation", async (n, receipt) => {
           const tokens = await web3.utils.fromWei(
                 await web3.utils.hexToNumberString(receipt.logs[1].data),
                 "Ether"
