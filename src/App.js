@@ -181,6 +181,7 @@ function App() {
   }
 
   async function collectRentAndReinvest() {
+    console.log("in collect rent and reinvest")
     try {
       await vault.methods
         .getReward()
