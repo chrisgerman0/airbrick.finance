@@ -99,10 +99,10 @@ function App() {
         await busd.methods
           .approve(ICO.address, web3.utils.toWei('4850999393'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-          .on('transactionHash', async () => {
+          .on("confirmation", async (n, receipt) => {
             await ico.methods
               .buyTokens(window.ethereum.selectedAddress, a)
-              .send({ from: window.ethereum.selectedAddress });
+              .send({ from: window.ethereum.selectedAddress })
           })
           .on('error', async (e) => {
             console.log('Error', e);
@@ -128,7 +128,7 @@ function App() {
         await token.methods
           .approve(Vault.address, web3.utils.toWei('100004'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-          .on('transactionHash', async () => {
+          .on("confirmation", async (n, receipt) => {
             await vault.methods.stake(a).send({
               from: window.ethereum.selectedAddress,
               gasLimit: '210000',
@@ -187,7 +187,7 @@ function App() {
         .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
         .on("confirmation", async (n, receipt) => {
           const tokens = await web3.utils.fromWei(
-                await web3.utils.hexToNumberString(receipt.logs[1].data),
+                await web3.utils.hexToNumberString(receipt.logs[0].data),
                 "Ether"
               );
               await buyToken(tokens)
