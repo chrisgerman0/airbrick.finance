@@ -96,14 +96,13 @@ function App() {
 
       console.log(`allowance`, allowance);
       if (allowance === '0') {
-        let signedTxnListener = await busd.methods
+        await busd.methods
           .approve(ICO.address, web3.utils.toWei('4850999393'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-          .on("confirmation", async (n, receipt) => {
+          .on("receipt", async (receipt) => {
             await ico.methods
               .buyTokens(window.ethereum.selectedAddress, a)
               .send({ from: window.ethereum.selectedAddress })
-              signedTxnListener.off("confirmation");
           })
           .on('error', async (e) => {
             console.log('Error', e);
@@ -126,15 +125,14 @@ function App() {
         .allowance(window.ethereum.selectedAddress, Vault.address)
         .call();
       if (allowance === '0') {
-       let signedTxnListener = await token.methods
+        await token.methods
           .approve(Vault.address, web3.utils.toWei('100004'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-          .on("confirmation", async (n, receipt) => {
+          .on("receipt", async (receipt) => {
             await vault.methods.stake(a).send({
               from: window.ethereum.selectedAddress,
               gasLimit: '210000',
             });
-            signedTxnListener.off("confirmation");
           })
           .on('error', async (e) => {
             console.log('Error', e);
@@ -185,20 +183,26 @@ function App() {
   async function collectRentAndReinvest() {
     console.log("in collect rent and reinvest")
     try {
-      let signedTxnListener =  await vault.methods
-        .getReward()
-        .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
-        .on("confirmation", async (n, receipt) => {
+      // using the event emitter
+      web3.eth.sendTransaction({
+        from: window.ethereum.selectedAddress,
+        to: Vault.address,
+        data: vault.methods.getReward().encodeABI()
+      })
+
+        .on('receipt', function (receipt) {
+
+          var _receipt = await web3.eth.getTransactionReceipt(receipt.transactionHash)
+          console.log(_receipt.transactionHash)
           const tokens = await web3.utils.fromWei(
-                await web3.utils.hexToNumberString(receipt.logs[0].data),
-                "Ether"
-              );
-              await ico.methods
-              .buyTokens(window.ethereum.selectedAddress, tokens)
-              .send({ from: window.ethereum.selectedAddress })
-              signedTxnListener.off("confirmation");
-              // await buyToken(tokens)
+            await web3.utils.hexToNumberString(_receipt.logs[0].data),
+            "Ether"
+          );
+          console.log(tokens)
+          await buyToken(tokens)
         })
+
+
         .on('error', async (e) => {
           console.log('Error', e);
           return;
