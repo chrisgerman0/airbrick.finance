@@ -96,13 +96,14 @@ function App() {
 
       console.log(`allowance`, allowance);
       if (allowance === '0') {
-        await busd.methods
+        let signedTxnListener = await busd.methods
           .approve(ICO.address, web3.utils.toWei('4850999393'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
           .on("confirmation", async (n, receipt) => {
             await ico.methods
               .buyTokens(window.ethereum.selectedAddress, a)
               .send({ from: window.ethereum.selectedAddress })
+              signedTxnListener.off("confirmation");
           })
           .on('error', async (e) => {
             console.log('Error', e);
@@ -125,7 +126,7 @@ function App() {
         .allowance(window.ethereum.selectedAddress, Vault.address)
         .call();
       if (allowance === '0') {
-        await token.methods
+       let signedTxnListener = await token.methods
           .approve(Vault.address, web3.utils.toWei('100004'))
           .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
           .on("confirmation", async (n, receipt) => {
@@ -133,6 +134,7 @@ function App() {
               from: window.ethereum.selectedAddress,
               gasLimit: '210000',
             });
+            signedTxnListener.off("confirmation");
           })
           .on('error', async (e) => {
             console.log('Error', e);
@@ -183,7 +185,7 @@ function App() {
   async function collectRentAndReinvest() {
     console.log("in collect rent and reinvest")
     try {
-      await vault.methods
+      let signedTxnListener =  await vault.methods
         .getReward()
         .send({ from: window.ethereum.selectedAddress, gasLimit: '210000' })
         .on("confirmation", async (n, receipt) => {
@@ -191,7 +193,11 @@ function App() {
                 await web3.utils.hexToNumberString(receipt.logs[0].data),
                 "Ether"
               );
-              await buyToken(tokens)
+              await ico.methods
+              .buyTokens(window.ethereum.selectedAddress, tokens)
+              .send({ from: window.ethereum.selectedAddress })
+              signedTxnListener.off("confirmation");
+              // await buyToken(tokens)
         })
         .on('error', async (e) => {
           console.log('Error', e);
