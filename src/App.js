@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 import NavbarPrimary from './view/components/NavbarPrimary';
 import RoutesPrimary from './RoutesPrimary';
 import FooterPrimary from './view/components/FooterPrimary';
@@ -21,6 +21,7 @@ function App() {
   const [vaultBalance, setVaultBalance] = useState('0');
   const [earnings, setEarnings] = useState('0');
   const [time, setTime] = useState(0);
+  const [allowBalancefetcher, setAllowBalancefetcher] = useState(true);
 
   async function connectWallet() {
     try {
@@ -43,6 +44,7 @@ function App() {
 
         let _token = new _web3.eth.Contract(Token.abi, Token.address);
         setToken(_token);
+
         let brick_balance = await _token.methods
           .balanceOf(window.ethereum.selectedAddress)
           .call();
@@ -52,31 +54,7 @@ function App() {
         let _vault = new _web3.eth.Contract(Vault.abi, Vault.address);
         setVault(_vault);
 
-        let b = await _vault.methods
-          .balanceOf(window.ethereum.selectedAddress)
-          .call();
-        let e = await _vault.methods
-          .earned(window.ethereum.selectedAddress)
-          .call();
-        let c = await _vault.methods
-          .newDeposit(window.ethereum.selectedAddress)
-          .call();
-        let d = await _vault.methods.hodlDuration().call();
-
-        setVaultBalance(_web3.utils.fromWei(b, 'ether'));
-        setEarnings(_web3.utils.fromWei(e, 'ether'));
-
-        setTime(parseInt(c) + parseInt(d));
-        console.log(parseInt(c));
-        console.log(parseInt(d));
-
-        let _busd = new _web3.eth.Contract(BUSD.abi, BUSD.address);
-        setBusd(_busd);
-        let busd_balance = await _busd.methods
-          .balanceOf(window.ethereum.selectedAddress)
-          .call();
-        setBusdBalance(_web3.utils.fromWei(busd_balance, 'ether'));
-        setLoading(false);
+        localStorage.setItem('vaultConnected', true);
       } else {
         alert('please install metamask');
         return;
@@ -85,6 +63,58 @@ function App() {
       alert('Error:', e);
       return;
     }
+  }
+
+
+  useEffect(() => {
+    let vaultConnected = localStorage.getItem('vaultConnected');
+    if (vaultConnected) {
+      connectWallet();
+    }
+    return () => {
+      setAllowBalancefetcher(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token && vault && web3) {
+      getBalance();
+    }
+  }, [token, vault, web3]);
+
+  const getBalance = async () => {
+    console.log({ getBalance: true });
+    let b = await vault.methods
+      .balanceOf(window.ethereum.selectedAddress)
+      .call();
+    let e = await vault.methods
+      .earned(window.ethereum.selectedAddress)
+      .call();
+    let c = await vault.methods
+      .newDeposit(window.ethereum.selectedAddress)
+      .call();
+    let d = await vault.methods.hodlDuration().call();
+
+    setVaultBalance(web3.utils.fromWei(b, "ether"));
+    setEarnings(web3.utils.fromWei(e, "ether"));
+
+    setTime(parseInt(c) + parseInt(d));
+    console.log(parseInt(c));
+    console.log(parseInt(d));
+
+    let _busd = new web3.eth.Contract(BUSD.abi, BUSD.address);
+    setBusd(_busd);
+    let busd_balance = await _busd.methods
+      .balanceOf(window.ethereum.selectedAddress)
+      .call();
+    setBusdBalance(web3.utils.fromWei(busd_balance, "ether"));
+    setLoading(false);
+
+    setTimeout(() => {
+      if (allowBalancefetcher) {
+        getBalance();
+      }
+    }, 2000);
   }
 
   async function buyToken(amount) {
@@ -190,8 +220,7 @@ function App() {
         data: vault.methods.getReward().encodeABI()
       })
 
-        .on('receipt', function (receipt) {
-
+        .on('receipt', async function (receipt) {
           var _receipt = await web3.eth.getTransactionReceipt(receipt.transactionHash)
           console.log(_receipt.transactionHash)
           const tokens = await web3.utils.fromWei(
