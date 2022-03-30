@@ -45,18 +45,12 @@ function App() {
         let _token = new _web3.eth.Contract(Token.abi, Token.address);
         setToken(_token);
 
-        let brick_balance = await _token.methods
-          .balanceOf(window.ethereum.selectedAddress)
-          .call();
-
-        setBrickBalance(_web3.utils.fromWei(brick_balance, 'ether'));
-
         let _vault = new _web3.eth.Contract(Vault.abi, Vault.address);
         setVault(_vault);
 
         localStorage.setItem('vaultConnected', true);
       } else {
-        alert('please install metamask');
+        alert('Please Install Metamask');
         return;
       }
     } catch (e) {
@@ -84,12 +78,15 @@ function App() {
 
   const getBalance = async () => {
     console.log({ getBalance: true });
+
     let b = await vault.methods
       .balanceOf(window.ethereum.selectedAddress)
       .call();
+
     let e = await vault.methods
       .earned(window.ethereum.selectedAddress)
       .call();
+
     let c = await vault.methods
       .newDeposit(window.ethereum.selectedAddress)
       .call();
@@ -98,15 +95,26 @@ function App() {
     setVaultBalance(web3.utils.fromWei(b, "ether"));
     setEarnings(web3.utils.fromWei(e, "ether"));
 
-    setTime(parseInt(c) + parseInt(d));
-    console.log(parseInt(c));
-    console.log(parseInt(d));
 
-    let _busd = new web3.eth.Contract(BUSD.abi, BUSD.address);
+    let brick_balance = await token.methods
+      .balanceOf(window.ethereum.selectedAddress)
+      .call();
+
+    setBrickBalance(web3.utils.fromWei(brick_balance, 'ether'));
+
+    setTime(parseInt(c) + parseInt(d));
+    // console.log(parseInt(c));
+    // console.log(parseInt(d));
+
+    const _web3 = new Web3(window.ethereum);
+    let _busd = new _web3.eth.Contract(BUSD.abi, BUSD.address);
     setBusd(_busd);
+
     let busd_balance = await _busd.methods
       .balanceOf(window.ethereum.selectedAddress)
       .call();
+
+    console.log({ busd_balance: web3.utils.fromWei(busd_balance, "ether") });
     setBusdBalance(web3.utils.fromWei(busd_balance, "ether"));
     setLoading(false);
 
@@ -117,6 +125,14 @@ function App() {
     }, 2000);
   }
 
+  useEffect(() => {
+    console.log({ busdBalance, brickBalance });
+  }, [busdBalance, brickBalance]);
+
+
+  useEffect(() => {
+    console.log({ vaultBalance });
+  }, [vaultBalance]);
   async function buyToken(amount) {
     try {
       let a = await web3.utils.toWei(amount);
